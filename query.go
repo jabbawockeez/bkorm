@@ -57,17 +57,17 @@ extra options used by a queryset object(Orm.conf field):
 */
 
 const (
-	// http methods
-	GET = "GET"
-	POST = "POST"
-	PUT = "PUT"
-	DELETE = "DELETE"
-
-	// condition operators
-	EQ = "$eq"
-	NE = "$ne"
-	REGEX = "$regex"
-
+    // http methods
+    GET = "GET"
+    POST = "POST"
+    PUT = "PUT"
+    DELETE = "DELETE"
+    
+    // condition operators
+    EQ = "$eq"
+    NE = "$ne"
+    REGEX = "$regex"
+    
     // object operation
     C = "CREATE"
     R = "READ"
@@ -89,20 +89,16 @@ type Orm struct {
     conf    *json.Json  // hold some options for current request
 }
 
-var wg sync.WaitGroup
 var Meta  *json.Json  // global meta data
 var apiconf *ApiConf
 var client *gorequest.SuperAgent
 
 func init() {
-    wg = sync.WaitGroup{}
     Meta = json.New()
 }
 
 func SetApi(url, bk_user string, supplier_id int, mongo string) {
-
     apiconf = &ApiConf{url, bk_user, supplier_id, mongo}
-
     client = newHttpClient()
 }
 
@@ -232,10 +228,10 @@ func (o *Orm) Update(obj interface{}) *Orm {
     o.Create(obj)
     o.conf.Del("C_obj_pointer")
 
-	//o.conf.Set("ObjId", bkObjIdOf(obj))
-	o.conf.Set("Method", PUT)
-	o.conf.Set("Operation", U)
-	o.conf.Set("U_InstId", o.GetInt("bk_inst_id"))
+    //o.conf.Set("ObjId", bkObjIdOf(obj))
+    o.conf.Set("Method", PUT)
+    o.conf.Set("Operation", U)
+    o.conf.Set("U_InstId", o.GetInt("bk_inst_id"))
 
     return o
 }
@@ -243,16 +239,16 @@ func (o *Orm) Update(obj interface{}) *Orm {
 func (o *Orm) Delete(obj interface{}) *Orm {
     o.Json = json.FromStruct(obj)
 
-	o.conf.Set("ObjId", bkObjIdOf(obj))
-	o.conf.Set("D_InstId", o.GetInt("bk_inst_id"))
-	o.conf.Set("Method", DELETE)
+    o.conf.Set("ObjId", bkObjIdOf(obj))
+    o.conf.Set("D_InstId", o.GetInt("bk_inst_id"))
+    o.conf.Set("Method", DELETE)
 
     return o
 }
 
 func (o *Orm) Page(start, limit int) *Orm {
-	o.EnSet(start, "page", "start")
-	o.EnSet(limit, "page", "limit")
+    o.EnSet(start, "page", "start")
+    o.EnSet(limit, "page", "limit")
 
     return o
 }
@@ -267,7 +263,7 @@ func (o *Orm) Filter(field string, value interface{}) *Orm {
     // the "field" can be both struct field name and its tag name,
     // if it's struct field name, we'll change it to tag name later in "beforeDo"
 
-	o.EnSet(value, "condition", field)
+    o.EnSet(value, "condition", field)
 
     return o
 }
